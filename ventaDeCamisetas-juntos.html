@@ -8,7 +8,7 @@
 			href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap"
 			rel="stylesheet">
 		<!-- <link rel="stylesheet" href="css/ventaDeCamisetas.css"/> -->
-  <style>
+		<style>
 body {
   margin: 0;
   font-family: 'Montserrat', sans-serif;
@@ -135,19 +135,9 @@ function inicio() {
 }
 
 function teclado(e) {
-  let longitud = document.querySelector(".texto").innerHTML.length;
-  let excepciones = [
-    "Delete",
-    "Backspace",
-    "ArrowUp",
-    "ArrowDown",
-    "ArrowRight",
-    "ArrowLeft",
-    "+",
-    "-",
-  ];
+  let longitud = document.querySelector(".texto").innerText.length;
 
-  if (longitud > 15 && excepciones.indexOf(e.key) == -1) {
+  if (longitud >= 20 && e.key !== "Backspace") {
     e.preventDefault();
   } else {
     let codigo = e.key;
@@ -194,12 +184,13 @@ function cambiarCamiseta() {
   }
 
   document.querySelector("#dibujo").src = `img/${camisetas[camisetaActual]}`;
-  document.querySelector(".texto").style.color = colores[camisetaActual];
 }
 
 function imprimir() {
   window.print();
 }
+</script>
+
 
 	</script>
 		<!-- <script type="text/javascript" src="js/ventaDeCamisetas.js"></script> -->
