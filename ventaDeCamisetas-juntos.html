@@ -1,24 +1,22 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="utf-8" />
-		<title>Venta de Camisetas</title>
-		<link rel="preconnect" href="https://fonts.gstatic.com">
-		<link
-			href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap"
-			rel="stylesheet">
-		<!-- <link rel="stylesheet" href="css/ventaDeCamisetas.css"/> -->
-		<style>
-body {
-  margin: 0;
-  font-family: 'Montserrat', sans-serif;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  background-color: #f0f0f0; /* Añade un color de fondo opcional */
-}
-
+<head>
+  <meta charset="utf-8" />
+  <title>Venta de Camisetas</title>
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap"
+    rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Montserrat', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background-color: #f0f0f0; /* Añade un color de fondo opcional */
+    }
 
     img {
       width: 100%;
@@ -53,6 +51,9 @@ body {
       color: white;
       margin-bottom: 15px;
       outline: none;
+      white-space: pre-wrap; /* Permite que el texto se ajuste automáticamente */
+      max-height: 200px; /* Altura máxima del área de texto */
+      overflow-y: auto; /* Agrega una barra de desplazamiento vertical cuando sea necesario */
     }
 
     #imprimir {
@@ -78,122 +79,118 @@ body {
       border: 4px solid orangered;
     }
   </style>
-	</head>
-	<body>
-		<main>
-			<div class="camiseta">
-				<div class="contenido">
-					<div class="texto" contenteditable="true" spellcheck="false"></div>
-					<div class="imagen">
-						<img id="rey" src alt="Rey">
-						<img id="dibujo" src alt="Camiseta">
-					</div>
-				</div>
-			</div>
-			<button id="imprimir">Imprimir</button>
-		</main>
-		<script>
-window.onload = inicio;
-var reyes = [
-  "atanagildo",
-  "ataulfo",
-  "ervigio",
-  "leogivildo",
-  "recesvinto",
-  "sisebuto",
-  "teodorico",
-];
-var camisetas = ["camisetaNegra.png", "camisetaBlanca.png", "verde.webp", "roja.webp"];
-var camisetaActual = 0;
-var reyActual = Math.floor(Math.random() * reyes.length);
-var size = 2;
+</head>
+<body>
+  <main>
+    <div class="camiseta">
+      <div class="contenido">
+        <div class="texto" contenteditable="true" spellcheck="false"></div>
+        <div class="imagen">
+          <img id="rey" src alt="Rey">
+          <img id="dibujo" src alt="Camiseta">
+        </div>
+      </div>
+    </div>
+    <button id="imprimir">Imprimir</button>
+  </main>
+  <script>
+    window.onload = inicio;
+    var reyes = [
+      "atanagildo",
+      "ataulfo",
+      "ervigio",
+      "leogivildo",
+      "recesvinto",
+      "sisebuto",
+      "teodorico",
+    ];
+    var camisetas = ["camisetaNegra.png", "camisetaBlanca.png", "verde.webp", "roja.webp"];
+    var camisetaActual = 0;
+    var reyActual = Math.floor(Math.random() * reyes.length);
+    var size = 2;
 
-function inicio() {
-  // Eventos y acciones iniciales
-  // Generar un número aleatorio para seleccionar una camiseta al azar
-  camisetaActual = Math.floor(Math.random() * camisetas.length);
+    function inicio() {
+      // Eventos y acciones iniciales
+      // Generar un número aleatorio para seleccionar una camiseta al azar
+      camisetaActual = Math.floor(Math.random() * camisetas.length);
 
-  // Cargar la camiseta inicial
-  document
-    .querySelector(".camiseta")
-    .insertAdjacentHTML(
-      "beforeend",
-      `<img id="dibujo" src="img/${camisetas[camisetaActual]}">`
-    );
+      // Cargar la camiseta inicial
+      document
+        .querySelector(".camiseta")
+        .insertAdjacentHTML(
+          "beforeend",
+          `<img id="dibujo" src="img/${camisetas[camisetaActual]}">`
+        );
 
-  // Cargar el rey inicial
-  document.querySelector(
-    ".imagen"
-  ).innerHTML = `<img id="rey" src="img/rey_${reyes[reyActual]}.png">`;
+      // Cargar el rey inicial
+      document.querySelector(
+        ".imagen"
+      ).innerHTML = `<img id="rey" src="img/rey_${reyes[reyActual]}.png">`;
 
-  // Eventos
-  window.onkeydown = teclado;
-  document.querySelector("#dibujo").onclick = cambiarCamiseta;
-  document.querySelector("#rey").onclick = cambiarRey;
-  document.querySelector("#imprimir").onclick = imprimir;
-  actualizarRey();
-}
-
-function teclado(e) {
-  let longitud = document.querySelector(".texto").innerText.length;
-
-  if (longitud >= 20 && e.key !== "Backspace") {
-    e.preventDefault();
-  } else {
-    let codigo = e.key;
-
-    if (codigo == "+") {
-      if (size < 3) {
-        size += 0.1;
-      }
-      e.preventDefault();
+      // Eventos
+      window.onkeydown = teclado;
+      document.querySelector("#dibujo").onclick = cambiarCamiseta;
+      document.querySelector("#rey").onclick = cambiarRey;
+      document.querySelector("#imprimir").onclick = imprimir;
+      actualizarRey();
     }
-    if (codigo == "-") {
-      if (size > 1) {
-        size -= 0.1;
+
+    function teclado(e) {
+      let longitud = document.querySelector(".texto").innerText.length;
+
+      if (longitud >= 20 && e.key !== "Backspace") {
+        e.preventDefault();
+      } else {
+        let codigo = e.key;
+
+        if (codigo == "+") {
+          if (size < 3) {
+            size += 0.1;
+          }
+          e.preventDefault();
+        }
+        if (codigo == "-") {
+          if (size > 1) {
+            size -= 0.1;
+          }
+          e.preventDefault();
+        }
+        document.querySelector(".texto").style.fontSize = size + "em";
       }
-      e.preventDefault();
     }
-    document.querySelector(".texto").style.fontSize = size + "em";
-  }
-}
 
-function actualizarRey() {
-  let reyConMayusculas =
-    reyes[reyActual].substr(0, 1).toUpperCase() +
-    reyes[reyActual].substr(1).toLowerCase();
-  let inicios = document.querySelector(".texto").innerHTML.substr(0, 3);
-  if (inicios == "I ♡" || inicios == "") {
-    document.querySelector(".texto").innerHTML = `I ♡ ${reyConMayusculas}`;
-  }
-}
+    function actualizarRey() {
+      let reyConMayusculas =
+        reyes[reyActual].substr(0, 1).toUpperCase() +
+        reyes[reyActual].substr(1).toLowerCase();
+      let inicios = document.querySelector(".texto").innerHTML.substr(0, 3);
+      if (inicios == "I ♡" || inicios == "") {
+        document.querySelector(".texto").innerHTML = `I ♡ ${reyConMayusculas}`;
+      }
+    }
 
-function cambiarRey() {
-  reyActual++;
-  if (reyActual >= reyes.length) {
-    reyActual = 0;
-  }
-  document.querySelector("#rey").src = `img/rey_${reyes[reyActual]}.png`;
-  actualizarRey();
-}
+    function cambiarRey() {
+      reyActual++;
+      if (reyActual >= reyes.length) {
+        reyActual = 0;
+      }
+      document.querySelector("#rey").src = `img/rey_${reyes[reyActual]}.png`;
+      actualizarRey();
+    }
 
-function cambiarCamiseta() {
-  camisetaActual++;
-  if (camisetaActual >= camisetas.length) {
-    camisetaActual = 0;
-  }
+    function cambiarCamiseta() {
+      camisetaActual++;
+      if (camisetaActual >= camisetas.length) {
+        camisetaActual = 0;
+      }
 
-  document.querySelector("#dibujo").src = `img/${camisetas[camisetaActual]}`;
-}
+      document.querySelector("#dibujo").src = `img/${camisetas[camisetaActual]}`;
+    }
 
-function imprimir() {
-  window.print();
-}
-</script>
-
-
-	</script>
-		<!-- <script type="text/javascript" src="js/ventaDeCamisetas.js"></script> -->
-
-	</body>
+    function imprimir() {
+      window.print();
+    }
+  </script>
+  <!-- <script type="text/javascript" src="js/ventaDeCamisetas.js"></script> -->
+</body>
 </html>
