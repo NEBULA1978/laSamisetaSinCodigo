@@ -18,7 +18,7 @@ function inicio() {
   // Generar un número aleatorio para seleccionar una camiseta al azar
   camisetaActual = Math.floor(Math.random() * camisetas.length);
 
-  // Cargar la camiseta inicial
+  // Cargar la camiseta principal (blanco y negro)
   document
     .querySelector(".camiseta")
     .insertAdjacentHTML(
@@ -26,10 +26,16 @@ function inicio() {
       `<img id="dibujo" src="img/${camisetas[camisetaActual]}">`
     );
 
+  // Establecer el tamaño de la camiseta principal como base
+  var tamanoBase = document.querySelector("#dibujo").clientWidth;
+
   // Cargar el rey inicial
   document.querySelector(
     ".imagen"
   ).innerHTML = `<img id="rey" src="img/rey_${reyes[reyActual]}.png">`;
+
+  // Establecer el tamaño de las imágenes de los reyes igual al tamaño de la camiseta principal
+  document.querySelector("#rey").style.width = tamanoBase + "px";
 
   // Eventos
   window.onkeydown = teclado;
@@ -98,7 +104,15 @@ function cambiarCamiseta() {
     camisetaActual = 0;
   }
 
+  // Cambiar la camiseta principal
   document.querySelector("#dibujo").src = `img/${camisetas[camisetaActual]}`;
+  
+  // Cambiar el tamaño de la camiseta principal
+  var tamanoBase = document.querySelector("#dibujo").clientWidth;
+  document.querySelector("#rey").style.width = tamanoBase + "px";
+  
+  // Cambiar el color del texto de acuerdo a la nueva camiseta
+  var colores = ["white", "black", "red"]; // Agrega el color para la nueva camiseta aquí
   document.querySelector(".texto").style.color = colores[camisetaActual];
 }
 
