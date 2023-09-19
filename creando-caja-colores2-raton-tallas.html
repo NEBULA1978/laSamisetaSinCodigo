@@ -79,12 +79,6 @@
             const imageTile = document.querySelector('.image-tile');
             imageTile.style.display = 'none';
 
-            // Ocultar todas las camisetas
-            const tshirts = document.querySelectorAll('.tshirt');
-            tshirts.forEach(tshirt => {
-                tshirt.style.display = 'none';
-            });
-
             // Mostrar la camiseta correspondiente a la talla seleccionada
             const tshirt = document.querySelector(`.tshirt[alt="Camiseta ${size}"]`);
             if (tshirt) {
@@ -96,11 +90,6 @@
         function hideTshirt() {
             const imageTile = document.querySelector('.image-tile');
             imageTile.style.display = 'block';
-
-            const tshirts = document.querySelectorAll('.tshirt');
-            tshirts.forEach(tshirt => {
-                tshirt.style.display = 'none';
-            });
         }
     </script>
 </body>
