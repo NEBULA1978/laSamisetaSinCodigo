@@ -6,8 +6,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     /* Estilos para la galería y el elemento destacado */
+    /* Estilos para la galería y el elemento destacado */
     .container {
       text-align: center;
+    }
+
+    .acciones {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 20rem; /* Aumenté el margen superior para separar más el botón del contenido de la galería */
     }
 
     .gallery {
@@ -56,7 +64,7 @@
     .acciones button {
       background-color: #dc3545;
       color: #fff;
-      padding: 5px 10px;
+      padding: 10px 20px; /* Aumentar el tamaño del botón */
       cursor: pointer;
       margin-right: 10px; /* Margen derecho para separar los botones */
     }
@@ -66,6 +74,9 @@
       color: #fff;
       padding: 10px 20px;
       cursor: pointer;
+      margin-top: 1rem; /* Margen superior para separar el botón "Añadir Imagen" */
+      display: block; /* Cambiar a bloque para que ocupe todo el ancho */
+      margin: 0 auto; /* Centrar horizontalmente */
     }
   </style>
 </head>
