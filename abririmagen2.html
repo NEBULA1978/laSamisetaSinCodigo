@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Galería de Imágenes</title>
+  <style>
+    /* Estilos para la galería y el elemento destacado */
+    .container {
+      text-align: center;
+    }
+
+    .gallery {
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+    }
+
+    .card {
+      border: 1px solid #ddd;
+      padding: 1rem;
+      text-align: center;
+    }
+
+    .card img {
+      width: 100%;
+      height: auto;
+    }
+
+    #imagenPrevia {
+      text-align: center;
+      margin-top: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Galería de Imágenes</h1>
+    <div class="gallery">
+      <!-- Aquí puedes incluir las imágenes estáticas -->
+      <article class="card">
+        <img src="./img/camisetaBlanca.png" alt="Camiseta Blanca">
+      </article>
+      <article class="card">
+        <img src="./img/camisetaNegra.png" alt="Camiseta Negra">
+      </article>
+      <!-- Agrega más imágenes estáticas según sea necesario -->
+
+      <!-- Aquí se mostrará la imagen cargada por el usuario -->
+      <div id="imagenPrevia">
+        <!-- Aquí se mostrará la imagen seleccionada -->
+      </div>
+    </div>
+    
+    <!-- Formulario para cargar una nueva imagen -->
+    <form action="#" method="post" enctype="multipart/form-data">
+      <label for="imagen">Selecciona una imagen:</label>
+      <input type="file" id="imagen" name="imagen" accept="image/*">
+      <input type="submit" value="Subir Imagen">
+    </form>
+  </div>
+
+  <script>
+    const imagenInput = document.getElementById('imagen');
+    const imagenPrevia = document.getElementById('imagenPrevia');
+
+    imagenInput.addEventListener('change', (event) => {
+      const file = event.target.files[0];
+
+      if (file) {
+        const reader = new FileReader();
+
+        reader.onload = (e) => {
+          const imagen = document.createElement('img');
+          imagen.src = e.target.result;
+          imagenPrevia.innerHTML = '';
+          imagenPrevia.appendChild(imagen);
+        };
+
+        reader.readAsDataURL(file);
+      }
+    });
+  </script>
+</body>
+</html>
