@@ -1,196 +1,169 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <title>Venta de Camisetas</title>
-  <link rel="preconnect" href="https://fonts.gstatic.com">
-  <link
-    href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap"
-    rel="stylesheet">
+  <meta charset="UTF-8">
+  <title>Galería de Imágenes</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    body {
-      margin: 0;
-      font-family: 'Montserrat', sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      background-color: #f0f0f0; /* Añade un color de fondo opcional */
+    /* Estilos para la galería y el elemento destacado */
+    .container {
+      text-align: center;
     }
 
-    img {
+    .gallery {
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: repeat(auto-fill, minmax(8rem, 1fr)); /* Ajustar el tamaño mínimo y máximo */
+    }
+
+    .card {
+      border: 1px solid #ddd;
+      padding: 1rem;
+      text-align: center;
+      max-height: 12rem; /* Establecer una altura máxima para las imágenes */
+      overflow: hidden; /* Ocultar el exceso de contenido en las cajas */
+      position: relative; /* Agregar posición relativa para posicionar el texto */
+    }
+
+    .card img {
       width: 100%;
-      vertical-align: top;
+      height: 100%; /* Añadir esto para que las imágenes tengan un tamaño fijo */
+      object-fit: contain; /* Añadir esto para que las imágenes mantengan su relación de aspecto */
     }
 
-    main {
-      text-align: center;
-      width: 825px;
-      margin: auto;
-    }
-
-    .camiseta {
-      cursor: pointer;
-      position: relative;
-      display: inline-block;
-    }
-
-    .contenido {
+    .info {
       position: absolute;
-      margin: auto;
-      top: 50%; /* Centra verticalmente */
+      bottom: 0;
       left: 0;
-      right: 0;
-      width: 44%;
-      transform: translateY(-50%); /* Ajusta la posición vertical */
+      width: 100%;
+      background-color: rgba(0, 0, 0, 0.6); /* Fondo transparente */
+      color: #fff;
+      padding: 0.5rem;
+      text-align: left;
+      display: none; /* Ocultar inicialmente el texto de los precios */
     }
 
-    .texto {
-      text-align: center;
-      font-size: 2em;
-      color: white;
-      margin-bottom: 15px;
-      outline: none;
-      white-space: pre-wrap; /* Permite que el texto se ajuste automáticamente */
-      max-height: 200px; /* Altura máxima del área de texto */
-      overflow-y: auto; /* Agrega una barra de desplazamiento vertical cuando sea necesario */
+    .card:hover .info {
+      display: block; /* Mostrar el texto de los precios al pasar el ratón por encima */
     }
 
-    #imprimir {
-      display: block;
-      margin: auto;
-      padding: 7px 20px;
-      font-size: 1.5em;
-      background-color: #F44336;
-      border-radius: 25px;
-      outline: none;
-      border: 4px solid white;
+    /* Establecer un tamaño específico para las imágenes en las cajas */
+    .static-image {
+      max-width: 100%;
+      max-height: 100%;
+      width: auto;
+      height: auto;
+    }
+
+    /* Estilos para el botón de examinar */
+    #examinar {
+      display: none; /* Ocultar el botón de examinar por defecto */
+    }
+
+    #btnAñadirImagen {
+      background-color: #007bff;
+      color: #fff;
+      padding: 10px 20px;
       cursor: pointer;
-      position: absolute;
-      color: white;
-      left: 0;
-      right: 0;
-      top: 690px;
-    }
-
-    #imprimir:hover {
-      color: orangered;
-      background-color: white;
-      border: 4px solid orangered;
     }
   </style>
 </head>
 <body>
-  <main>
-    <div class="camiseta">
-      <div class="contenido">
-        <div class="texto" contenteditable="true" spellcheck="false"></div>
-        <div class="imagen">
-          <img id="rey" src alt="Rey">
-          <img id="dibujo" src alt="Camiseta">
+  <div class="container">
+    <h1>Galería de Productos</h1>
+    <div class="gallery" id="imagenesCargadas">
+      <!-- Productos -->
+      <article class="card">
+        <img src="./img/camisetaBlanca.png" alt="Producto 1" class="static-image">
+        <div class="info">
+          <p>Camiseta Blanca</p>
+          <p>Precio: $50.00</p>
+          <p>Precio con Descuento: $45.00</p>
         </div>
-      </div>
+      </article>
+      <article class="card">
+        <img src="./img/camisetaNegra.png" alt="Producto 2" class="static-image">
+        <div class="info">
+          <p>Camiseta Negra</p>
+          <p>Precio: $60.00</p>
+          <p>Precio con Descuento: $55.00</p>
+        </div>
+      </article>
+      <!-- Agrega más productos según sea necesario -->
     </div>
-    <button id="imprimir">Imprimir</button>
-  </main>
+    
+    <!-- Formulario para cargar una nueva imagen -->
+    <form action="#" method="post" enctype="multipart/form-data" id="formularioImagen">
+      <label for="examinar" id="btnAñadirImagen">Añadir Imagen</label>
+      <input type="file" id="examinar" name="imagen" accept="image/*" multiple>
+    </form>
+
+    <!-- Campo para ingresar la URL de la imagen a descargar -->
+    <input type="text" id="urlImagen" placeholder="URL de la imagen">
+    <button onclick="descargarImagen()">Descargar Imagen</button>
+  </div>
+
   <script>
-    window.onload = inicio;
-    var reyes = [
-      "atanagildo",
-      "ataulfo",
-      "ervigio",
-      "leogivildo",
-      "recesvinto",
-      "sisebuto",
-      "teodorico",
-    ];
-    var camisetas = ["camisetaNegra.png", "camisetaBlanca.png", "verde.webp", "roja.webp"];
-    var camisetaActual = 0;
-    var reyActual = Math.floor(Math.random() * reyes.length);
-    var size = 2;
+    const examinarInput = document.getElementById('examinar');
+    const imagenesCargadas = document.getElementById('imagenesCargadas');
+    const formularioImagen = document.getElementById('formularioImagen');
+    const urlImagenInput = document.getElementById('urlImagen');
 
-    function inicio() {
-      // Eventos y acciones iniciales
-      // Generar un número aleatorio para seleccionar una camiseta al azar
-      camisetaActual = Math.floor(Math.random() * camisetas.length);
+    examinarInput.addEventListener('change', (event) => {
+      const files = event.target.files;
 
-      // Cargar la camiseta inicial
-      document
-        .querySelector(".camiseta")
-        .insertAdjacentHTML(
-          "beforeend",
-          `<img id="dibujo" src="img/${camisetas[camisetaActual]}">`
-        );
+      if (files.length > 0) {
+        for (const file of files) {
+          const reader = new FileReader();
 
-      // Cargar el rey inicial
-      document.querySelector(
-        ".imagen"
-      ).innerHTML = `<img id="rey" src="img/rey_${reyes[reyActual]}.png">`;
+          reader.onload = (e) => {
+            const imageContainer = document.createElement('div');
+            imageContainer.className = 'card';
+            imageContainer.innerHTML = `
+              <img src="${e.target.result}" alt="${file.name}" class="static-image">
+              <div class="info">
+                <p>${file.name}</p>
+                <p>Precio: $XX.XX</p>
+                <p>Precio con Descuento: $XX.XX</p>
+              </div>
+            `;
+            imagenesCargadas.appendChild(imageContainer);
+          };
 
-      // Eventos
-      window.onkeydown = teclado;
-      document.querySelector("#dibujo").onclick = cambiarCamiseta;
-      document.querySelector("#rey").onclick = cambiarRey;
-      document.querySelector("#imprimir").onclick = imprimir;
-      actualizarRey();
-    }
-
-    function teclado(e) {
-      let longitud = document.querySelector(".texto").innerText.length;
-
-      if (longitud >= 20 && e.key !== "Backspace") {
-        e.preventDefault();
-      } else {
-        let codigo = e.key;
-
-        if (codigo == "+") {
-          if (size < 3) {
-            size += 0.1;
-          }
-          e.preventDefault();
+          reader.readAsDataURL(file);
         }
-        if (codigo == "-") {
-          if (size > 1) {
-            size -= 0.1;
-          }
-          e.preventDefault();
-        }
-        document.querySelector(".texto").style.fontSize = size + "em";
+
+        examinarInput.value = ''; // Limpiar el valor del input para permitir seleccionar más imágenes
       }
-    }
+    });
 
-    function actualizarRey() {
-      let reyConMayusculas =
-        reyes[reyActual].substr(0, 1).toUpperCase() +
-        reyes[reyActual].substr(1).toLowerCase();
-      let inicios = document.querySelector(".texto").innerHTML.substr(0, 3);
-      if (inicios == "I ♡" || inicios == "") {
-        document.querySelector(".texto").innerHTML = `I ♡ ${reyConMayusculas}`;
+    formularioImagen.addEventListener('submit', (event) => {
+      event.preventDefault(); // Evitar que el formulario se envíe y recargue la página
+    });
+
+    function descargarImagen() {
+      const url = urlImagenInput.value;
+
+      if (url) {
+        const imagen = new Image();
+        imagen.src = url;
+        imagen.className = 'static-image'; // Agregar la clase para ajustar el tamaño
+
+        const imageContainer = document.createElement('div');
+        imageContainer.className = 'card';
+        imageContainer.innerHTML = `
+          <img src="${url}" alt="Imagen" class="static-image">
+          <div class="info">
+            <p>Imagen Descargada</p>
+            <p>Precio: $XX.XX</p>
+            <p>Precio con Descuento: $XX.XX</p>
+          </div>
+        `;
+
+        imagenesCargadas.appendChild(imageContainer);
+        urlImagenInput.value = ''; // Limpiar el campo de entrada de URL
       }
-    }
-
-    function cambiarRey() {
-      reyActual++;
-      if (reyActual >= reyes.length) {
-        reyActual = 0;
-      }
-      document.querySelector("#rey").src = `img/rey_${reyes[reyActual]}.png`;
-      actualizarRey();
-    }
-
-    function cambiarCamiseta() {
-      camisetaActual++;
-      if (camisetaActual >= camisetas.length) {
-        camisetaActual = 0;
-      }
-
-      document.querySelector("#dibujo").src = `img/${camisetas[camisetaActual]}`;
-    }
-
-    function imprimir() {
-      window.print();
     }
   </script>
-  <!-- <script type="text/javascript" src="js/ventaDeCamisetas.js"></script> -->
 </body>
 </html>
