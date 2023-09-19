@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Galería de Imágenes</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    /* Estilos para la galería y el elemento destacado */
+    .container {
+      text-align: center;
+    }
+
+    .gallery {
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: repeat(auto-fill, minmax(8rem, 1fr)); /* Ajustar el tamaño mínimo y máximo */
+    }
+
+    .card {
+      border: 1px solid #ddd;
+      padding: 1rem;
+      text-align: center;
+      max-height: 8rem; /* Establecer una altura máxima para las imágenes */
+      overflow: hidden; /* Ocultar el exceso de contenido en las cajas */
+    }
+
+    .card img {
+      width: 100%;
+      height: 100%; /* Añadir esto para que las imágenes tengan un tamaño fijo */
+      object-fit: contain; /* Añadir esto para que las imágenes mantengan su relación de aspecto */
+    }
+
+    #imagenPrevia {
+      text-align: center;
+      margin-top: 1rem;
+    }
+
+    /* Establecer un tamaño específico para las imágenes en las cajas */
+    .static-image {
+      max-width: 100%;
+      max-height: 100%;
+      width: auto;
+      height: auto;
+    }
+
+    /* Estilos para el botón de examinar */
+    #examinar {
+      display: none; /* Ocultar el botón de examinar por defecto */
+    }
+
+    #btnAñadirImagen {
+      background-color: #007bff;
+      color: #fff;
+      padding: 10px 20px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Galería de Imágenes</h1>
+    <div class="gallery">
+      <!-- Aquí puedes incluir las imágenes estáticas -->
+      <article class="card">
+        <img src="./img/camisetaBlanca.png" alt="Camiseta Blanca" class="static-image">
+      </article>
+      <article class="card">
+        <img src="./img/camisetaNegra.png" alt="Camiseta Negra" class="static-image">
+      </article>
+      <!-- Agrega más imágenes estáticas según sea necesario -->
+    </div>
+    
+    <!-- Formulario para cargar una nueva imagen -->
+    <form action="#" method="post" enctype="multipart/form-data" id="formularioImagen">
+      <label for="examinar" id="btnAñadirImagen">Añadir Imagen</label>
+      <input type="file" id="examinar" name="imagen" accept="image/*" multiple>
+    </form>
+
+    <!-- Campo para ingresar la URL de la imagen a descargar -->
+    <input type="text" id="urlImagen" placeholder="URL de la imagen">
+    <button onclick="descargarImagen()">Descargar Imagen</button>
+
+    <!-- Aquí se mostrarán las imágenes cargadas por el usuario -->
+    <div id="imagenesCargadas">
+      <!-- Aquí se mostrarán las imágenes seleccionadas -->
+    </div>
+  </div>
+
+  <script>
+    const examinarInput = document.getElementById('examinar');
+    const imagenesCargadas = document.getElementById('imagenesCargadas');
+    const formularioImagen = document.getElementById('formularioImagen');
+    const urlImagenInput = document.getElementById('urlImagen');
+
+    examinarInput.addEventListener('change', (event) => {
+      const files = event.target.files;
+
+      if (files.length > 0) {
+        for (const file of files) {
+          const reader = new FileReader();
+
+          reader.onload = (e) => {
+            const imagen = document.createElement('img');
+            imagen.src = e.target.result;
+            imagen.className = 'static-image'; // Agregar la clase para ajustar el tamaño
+            imagenesCargadas.appendChild(imagen);
+          };
+
+          reader.readAsDataURL(file);
+        }
+
+        examinarInput.value = ''; // Limpiar el valor del input para permitir seleccionar más imágenes
+      }
+    });
+
+    formularioImagen.addEventListener('submit', (event) => {
+      event.preventDefault(); // Evitar que el formulario se envíe y recargue la página
+    });
+
+    function descargarImagen() {
+      const url = urlImagenInput.value;
+
+      if (url) {
+        const imagen = new Image();
+        imagen.src = url;
+        imagen.className = 'static-image'; // Agregar la clase para ajustar el tamaño
+        imagenesCargadas.appendChild(imagen);
+        urlImagenInput.value = ''; // Limpiar el campo de entrada de URL
+      }
+    }
+  </script>
+</body>
+</html>
