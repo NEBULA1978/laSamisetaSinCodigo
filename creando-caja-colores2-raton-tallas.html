@@ -57,11 +57,11 @@
     <div class="image-tile-container">
         <img class="image-tile" src="https://img01.ztat.net/article/spp-media-p1/5e25b55879854bf5a2a1f51c71dc346c/8af578ec3ac34ab58eb5fcc3db269896.jpg" alt="Imagen">
         <ul class="size-list">
-            <li data-size="XS">XS</li>
-            <li data-size="S">S</li>
-            <li data-size="M">M</li>
-            <li data-size="L">L</li>
-            <li data-size="XL">XL</li>
+            <li data-size="XS" onmouseover="showTshirt('XS')" onmouseout="hideTshirt()">XS</li>
+            <li data-size="S" onmouseover="showTshirt('S')" onmouseout="hideTshirt()">S</li>
+            <li data-size="M" onmouseover="showTshirt('M')" onmouseout="hideTshirt()">M</li>
+            <li data-size="L" onmouseover="showTshirt('L')" onmouseout="hideTshirt()">L</li>
+            <li data-size="XL" onmouseover="showTshirt('XL')" onmouseout="hideTshirt()">XL</li>
         </ul>
     </div>
 
@@ -73,25 +73,35 @@
     <img class="tshirt" src="./img/roja.webp" alt="Camiseta XL">
 
     <script>
-        // Agregar un evento de clic a las tallas
-        const sizeListItems = document.querySelectorAll('.size-list li');
-        const tshirts = document.querySelectorAll('.tshirt');
+        // Función para mostrar una camiseta específica
+        function showTshirt(size) {
+            // Ocultar la imagen de la chica
+            const imageTile = document.querySelector('.image-tile');
+            imageTile.style.display = 'none';
 
-        sizeListItems.forEach((sizeItem, index) => {
-            sizeItem.addEventListener('click', () => {
-                // Ocultar la imagen de la chica
-                const imageTile = document.querySelector('.image-tile');
-                imageTile.style.display = 'none';
-
-                // Ocultar todas las camisetas
-                tshirts.forEach(tshirt => {
-                    tshirt.style.display = 'none';
-                });
-
-                // Mostrar la camiseta correspondiente a la talla seleccionada
-                tshirts[index].style.display = 'block';
+            // Ocultar todas las camisetas
+            const tshirts = document.querySelectorAll('.tshirt');
+            tshirts.forEach(tshirt => {
+                tshirt.style.display = 'none';
             });
-        });
+
+            // Mostrar la camiseta correspondiente a la talla seleccionada
+            const tshirt = document.querySelector(`.tshirt[alt="Camiseta ${size}"]`);
+            if (tshirt) {
+                tshirt.style.display = 'block';
+            }
+        }
+
+        // Función para ocultar todas las camisetas y mostrar la imagen inicial
+        function hideTshirt() {
+            const imageTile = document.querySelector('.image-tile');
+            imageTile.style.display = 'block';
+
+            const tshirts = document.querySelectorAll('.tshirt');
+            tshirts.forEach(tshirt => {
+                tshirt.style.display = 'none';
+            });
+        }
     </script>
 </body>
 </html>
