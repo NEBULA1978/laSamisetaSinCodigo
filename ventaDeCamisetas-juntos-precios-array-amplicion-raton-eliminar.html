@@ -94,8 +94,7 @@
   </div>
 
   <script>
-
-        const examinarInput = document.getElementById('examinar');
+    const examinarInput = document.getElementById('examinar');
     const imagenesCargadas = document.getElementById('imagenesCargadas');
     const formularioImagen = document.getElementById('formularioImagen');
     const urlImagenInput = document.getElementById('urlImagen');
@@ -166,7 +165,6 @@
         localStorage.setItem('imagenes', JSON.stringify(imagenesGuardadas));
       }
     }
-    // ... (código JavaScript anterior sin cambios)
 
     function eliminarImagen() {
       // Obtener la última imagen agregada
@@ -176,12 +174,18 @@
       // Eliminar la última imagen si existe
       if (ultimaImagen) {
         imagenesCargadas.removeChild(ultimaImagen);
+        // Eliminar la última imagen del array y actualizar localStorage
+        imagenesGuardadas.pop();
+        localStorage.setItem('imagenes', JSON.stringify(imagenesGuardadas));
       }
     }
 
     function eliminarTodasLasImagenes() {
       // Eliminar todas las imágenes
       imagenesCargadas.innerHTML = '';
+      // Limpiar el array y actualizar localStorage
+      imagenesGuardadas.length = 0;
+      localStorage.removeItem('imagenes');
     }
   </script>
 </body>
