@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Galería de Imágenes</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    /* Estilos para la galería y el elemento destacado */
+    .container {
+      text-align: center;
+    }
+
+    .gallery {
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: repeat(auto-fill, minmax(8rem, 1fr)); /* Ajustar el tamaño mínimo y máximo */
+    }
+
+    .card {
+      border: 1px solid #ddd;
+      padding: 1rem;
+      text-align: center;
+      max-height: 12rem; /* Establecer una altura máxima para las imágenes */
+      overflow: hidden; /* Ocultar el exceso de contenido en las cajas */
+    }
+
+    .card img {
+      width: 100%;
+      height: 100%; /* Añadir esto para que las imágenes tengan un tamaño fijo */
+      object-fit: contain; /* Añadir esto para que las imágenes mantengan su relación de aspecto */
+    }
+
+    .info {
+      margin-top: 1rem;
+      text-align: center;
+    }
+
+    /* Establecer un tamaño específico para las imágenes en las cajas */
+    .static-image {
+      max-width: 100%;
+      max-height: 100%;
+      width: auto;
+      height: auto;
+    }
+
+    /* Estilos para el botón de examinar */
+    #examinar {
+      display: none; /* Ocultar el botón de examinar por defecto */
+    }
+
+    #btnAñadirImagen {
+      background-color: #007bff;
+      color: #fff;
+      padding: 10px 20px;
+      cursor: pointer;
+    }
+
+    .image-container {
+      position: relative;
+    }
+
+    .info-container {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background-color: rgba(0, 0, 0, 0.8);
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Galería de Productos</h1>
+    <div class="gallery" id="imagenesCargadas">
+      <!-- Productos -->
+      <article class="card">
+        <div class="image-container">
+          <img src="./img/camisetaBlanca.png" alt="Producto 1" class="static-image">
+          <div class="info-container">
+            <p>Camiseta Blanca</p>
+            <p>Precio: $50.00</p>
+            <p>Precio con Descuento: $45.00</p>
+          </div>
+        </div>
+      </article>
+      <article class="card">
+        <div class="image-container">
+          <img src="./img/camisetaNegra.png" alt="Producto 2" class="static-image">
+          <div class="info-container">
+            <p>Camiseta Negra</p>
+            <p>Precio: $60.00</p>
+            <p>Precio con Descuento: $55.00</p>
+          </div>
+        </div>
+      </article>
+      <!-- Agrega más productos según sea necesario -->
+    </div>
+    
+    <!-- Formulario para cargar una nueva imagen -->
+    <form action="#" method="post" enctype="multipart/form-data" id="formularioImagen">
+      <label for="examinar" id="btnAñadirImagen">Añadir Imagen</label>
+      <input type="file" id="examinar" name="imagen" accept="image/*" multiple>
+    </form>
+
+    <!-- Campo para ingresar la URL de la imagen a descargar -->
+    <input type="text" id="urlImagen" placeholder="URL de la imagen">
+    <button onclick="descargarImagen()">Descargar Imagen</button>
+  </div>
+
+  <script>
+    const examinarInput = document.getElementById('examinar');
+    const imagenesCargadas = document.getElementById('imagenesCargadas');
+    const formularioImagen = document.getElementById('formularioImagen');
+    const urlImagenInput = document.getElementById('urlImagen');
+
+    examinarInput.addEventListener('change', (event) => {
+      const files = event.target.files;
+
+      if (files.length > 0) {
+        for (const file of files) {
+          const reader = new FileReader();
+
+          reader.onload = (e) => {
+            const imageContainer = document.createElement('div');
+            imageContainer.className = 'card';
+            imageContainer.innerHTML = `
+              <div class="image-container">
+                <img src="${e.target.result}" alt="${file.name}" class="static-image">
+                <div class="info-container">
+                  <p>${file.name}</p>
+                  <p>Precio: $XX.XX</p>
+                  <p>Precio con Descuento: $XX.XX</p>
+                </div>
+              </div>
+            `;
+            imagenesCargadas.appendChild(imageContainer);
+          };
+
+          reader.readAsDataURL(file);
+        }
+
+        examinarInput.value = ''; // Limpiar el valor del input para permitir seleccionar más imágenes
+      }
+    });
+
+    formularioImagen.addEventListener('submit', (event) => {
+      event.preventDefault(); // Evitar que el formulario se envíe y recargue la página
+    });
+
+    function descargarImagen() {
+      const url = urlImagenInput.value;
+
+      if (url) {
+        const imagen = new Image();
+        imagen.src = url;
+        imagen.className = 'static-image'; // Agregar la clase para ajustar el tamaño
+
+        const imageContainer = document.createElement('div');
+        imageContainer.className = 'card';
+        imageContainer.innerHTML = `
+          <div class="image-container">
+            <img src="${url}" alt="Imagen" class="static-image">
+            <div class="info-container">
+              <p>Imagen Descargada</p>
+              <p>Precio: $XX.XX</p>
+              <p>Precio con Descuento: $XX.XX</p>
+            </div>
+          </div>
+        `;
+
+        imagenesCargadas.appendChild(imageContainer);
+        urlImagenInput.value = ''; // Limpiar el campo de entrada de URL
+      }
+    }
+  </script>
+</body>
+</html>
