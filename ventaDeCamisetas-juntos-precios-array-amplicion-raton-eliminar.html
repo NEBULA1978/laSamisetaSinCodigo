@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Galería de Imágenes</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    /* Estilos para la galería y el elemento destacado */
+    .container {
+      text-align: center;
+    }
+
+    .gallery {
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: repeat(auto-fill, minmax(8rem, 1fr)); /* Ajustar el tamaño mínimo y máximo */
+    }
+
+    .card {
+      border: 1px solid #ddd;
+      padding: 1rem;
+      text-align: center;
+      max-height: 12rem; /* Establecer una altura máxima para las imágenes */
+      overflow: hidden; /* Ocultar el exceso de contenido en las cajas */
+      position: relative; /* Agregar posición relativa para posicionar el texto */
+      transition: transform 0.3s, filter 0.3s; /* Transiciones para el efecto de aumento y brillo */
+    }
+
+    .card img {
+      width: 100%;
+      height: 100%; /* Añadir esto para que las imágenes tengan un tamaño fijo */
+      object-fit: contain; /* Añadir esto para que las imágenes mantengan su relación de aspecto */
+      transition: filter 0.3s; /* Transición para el efecto de brillo */
+    }
+
+    .card:hover {
+      transform: scale(1.05); /* Aumentar el tamaño al pasar el ratón */
+    }
+
+    .card:hover img {
+      filter: brightness(1.2); /* Agregar brillo al pasar el ratón */
+    }
+
+    /* Estilos para el botón de examinar */
+    #examinar {
+      display: none; /* Ocultar el botón de examinar por defecto */
+    }
+
+    .acciones {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 1rem; /* Margen superior para separar el botón del contenido de la galería */
+    }
+
+    .acciones button {
+      background-color: #dc3545;
+      color: #fff;
+      padding: 5px 10px;
+      cursor: pointer;
+      margin-right: 10px; /* Margen derecho para separar los botones */
+    }
+
+    #btnAñadirImagen {
+      background-color: #007bff;
+      color: #fff;
+      padding: 10px 20px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Galería de Productos</h1>
+    <div class="gallery" id="imagenesCargadas">
+      <!-- Productos -->
+    </div>
+
+    <!-- Botón "Añadir Imagen" -->
+    <form action="#" method="post" enctype="multipart/form-data" id="formularioImagen">
+      <label for="examinar" id="btnAñadirImagen">Añadir Imagen</label>
+      <input type="file" id="examinar" name="imagen" accept="image/*" multiple>
+    </form>
+
+    <!-- Campo para ingresar la URL de la imagen a descargar -->
+    <input type="text" id="urlImagen" placeholder="URL de la imagen">
+    <button onclick="descargarImagen()">Descargar Imagen</button>
+
+    <!-- Botones de acciones -->
+    <div class="acciones">
+      <button onclick="eliminarImagen()">Eliminar Imagen</button>
+      <button onclick="eliminarTodasLasImagenes()">Eliminar Todas</button>
+    </div>
+  </div>
+
+  <script>
+
+        const examinarInput = document.getElementById('examinar');
+    const imagenesCargadas = document.getElementById('imagenesCargadas');
+    const formularioImagen = document.getElementById('formularioImagen');
+    const urlImagenInput = document.getElementById('urlImagen');
+
+    // Recuperar las imágenes guardadas en localStorage
+    const imagenesGuardadas = JSON.parse(localStorage.getItem('imagenes')) || [];
+
+    // Cargar las imágenes guardadas al cargar la página
+    imagenesGuardadas.forEach((imagenData) => {
+      const imageContainer = document.createElement('div');
+      imageContainer.className = 'card';
+      imageContainer.innerHTML = `
+        <img src="${imagenData.src}" alt="${imagenData.name}" class="static-image">
+      `;
+      imagenesCargadas.appendChild(imageContainer);
+    });
+
+    examinarInput.addEventListener('change', (event) => {
+      const files = event.target.files;
+
+      if (files.length > 0) {
+        for (const file of files) {
+          const reader = new FileReader();
+
+          reader.onload = (e) => {
+            const imageContainer = document.createElement('div');
+            imageContainer.className = 'card';
+            imageContainer.innerHTML = `
+              <img src="${e.target.result}" alt="${file.name}" class="static-image">
+            `;
+            imagenesCargadas.appendChild(imageContainer);
+
+            // Guardar la imagen en el array y en localStorage
+            imagenesGuardadas.push({ src: e.target.result, name: file.name });
+            localStorage.setItem('imagenes', JSON.stringify(imagenesGuardadas));
+          };
+
+          reader.readAsDataURL(file);
+        }
+
+        examinarInput.value = ''; // Limpiar el valor del input para permitir seleccionar más imágenes
+      }
+    });
+
+    formularioImagen.addEventListener('submit', (event) => {
+      event.preventDefault(); // Evitar que el formulario se envíe y recargue la página
+    });
+
+    function descargarImagen() {
+      const url = urlImagenInput.value;
+
+      if (url) {
+        const imagen = new Image();
+        imagen.src = url;
+        imagen.className = 'static-image'; // Agregar la clase para ajustar el tamaño
+
+        const imageContainer = document.createElement('div');
+        imageContainer.className = 'card';
+        imageContainer.innerHTML = `
+          <img src="${url}" alt="Imagen" class="static-image">
+        `;
+
+        imagenesCargadas.appendChild(imageContainer);
+        urlImagenInput.value = ''; // Limpiar el campo de entrada de URL
+
+        // Guardar la imagen en el array y en localStorage
+        imagenesGuardadas.push({ src: url, name: 'Imagen Descargada' });
+        localStorage.setItem('imagenes', JSON.stringify(imagenesGuardadas));
+      }
+    }
+    // ... (código JavaScript anterior sin cambios)
+
+    function eliminarImagen() {
+      // Obtener la última imagen agregada
+      const imagenes = document.querySelectorAll('.card');
+      const ultimaImagen = imagenes[imagenes.length - 1];
+
+      // Eliminar la última imagen si existe
+      if (ultimaImagen) {
+        imagenesCargadas.removeChild(ultimaImagen);
+      }
+    }
+
+    function eliminarTodasLasImagenes() {
+      // Eliminar todas las imágenes
+      imagenesCargadas.innerHTML = '';
+    }
+  </script>
+</body>
+</html>
