@@ -43,12 +43,13 @@
         top: 0;
         left: 0;
         width: 100%;
+        z-index: -1; /* Enviamos la camiseta al fondo */
     }
 </style>
 
 </head>
 <body>
-    <div class="image-tile-container">
+    <div class="image-tile-container" onmouseover="showSizeList()" onmouseout="hideSizeList()">
         <img class="image-tile" src="https://img01.ztat.net/article/spp-media-p1/5e25b55879854bf5a2a1f51c71dc346c/8af578ec3ac34ab58eb5fcc3db269896.jpg" alt="Imagen">
         <ul class="size-list">
             <li data-size="XS" onmouseover="showTshirt('XS')" onmouseout="hideTshirt()">XS</li>
@@ -67,8 +68,24 @@
     <img class="tshirt" src="./img/roja.webp" alt="Camiseta XL">
 
     <script>
+        // Función para mostrar el menú de las tallas
+        function showSizeList() {
+            const sizeList = document.querySelector('.size-list');
+            sizeList.style.opacity = '1';
+        }
+
+        // Función para ocultar el menú de las tallas
+        function hideSizeList() {
+            const sizeList = document.querySelector('.size-list');
+            sizeList.style.opacity = '0';
+        }
+
         // Función para mostrar una camiseta específica
         function showTshirt(size) {
+            // Ocultar la imagen de la chica
+            const imageTile = document.querySelector('.image-tile');
+            imageTile.style.display = 'none';
+
             // Mostrar la camiseta correspondiente a la talla seleccionada
             const tshirt = document.querySelector(`.tshirt[alt="Camiseta ${size}"]`);
             if (tshirt) {
@@ -76,13 +93,10 @@
             }
         }
 
-        // Función para ocultar todas las camisetas
+        // Función para ocultar todas las camisetas y mostrar la imagen inicial
         function hideTshirt() {
-            // Ocultar todas las camisetas
-            const tshirts = document.querySelectorAll('.tshirt');
-            tshirts.forEach(tshirt => {
-                tshirt.style.display = 'none';
-            });
+            const imageTile = document.querySelector('.image-tile');
+            imageTile.style.display = 'block';
         }
     </script>
 </body>
