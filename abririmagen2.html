@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Galería de Imágenes</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     /* Estilos para la galería y el elemento destacado */
     .container {
@@ -12,23 +13,34 @@
     .gallery {
       display: grid;
       gap: 1rem;
-      grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(8rem, 1fr)); /* Ajustar el tamaño mínimo y máximo */
     }
 
     .card {
       border: 1px solid #ddd;
       padding: 1rem;
       text-align: center;
+      max-height: 8rem; /* Establecer una altura máxima para las imágenes */
+      overflow: hidden; /* Ocultar el exceso de contenido en las cajas */
     }
 
     .card img {
       width: 100%;
-      height: auto;
+      height: 100%; /* Añadir esto para que las imágenes tengan un tamaño fijo */
+      object-fit: contain; /* Añadir esto para que las imágenes mantengan su relación de aspecto */
     }
 
     #imagenPrevia {
       text-align: center;
       margin-top: 1rem;
+    }
+
+    /* Establecer un tamaño específico para las imágenes en las cajas */
+    .static-image {
+      max-width: 100%;
+      max-height: 100%;
+      width: auto;
+      height: auto;
     }
   </style>
 </head>
@@ -38,30 +50,31 @@
     <div class="gallery">
       <!-- Aquí puedes incluir las imágenes estáticas -->
       <article class="card">
-        <img src="./img/camisetaBlanca.png" alt="Camiseta Blanca">
+        <img src="./img/camisetaBlanca.png" alt="Camiseta Blanca" class="static-image">
       </article>
       <article class="card">
-        <img src="./img/camisetaNegra.png" alt="Camiseta Negra">
+        <img src="./img/camisetaNegra.png" alt="Camiseta Negra" class="static-image">
       </article>
       <!-- Agrega más imágenes estáticas según sea necesario -->
-
-      <!-- Aquí se mostrará la imagen cargada por el usuario -->
-      <div id="imagenPrevia">
-        <!-- Aquí se mostrará la imagen seleccionada -->
-      </div>
     </div>
     
     <!-- Formulario para cargar una nueva imagen -->
-    <form action="#" method="post" enctype="multipart/form-data">
+    <form action="#" method="post" enctype="multipart/form-data" id="formularioImagen">
       <label for="imagen">Selecciona una imagen:</label>
       <input type="file" id="imagen" name="imagen" accept="image/*">
       <input type="submit" value="Subir Imagen">
     </form>
+
+    <!-- Aquí se mostrará la imagen cargada por el usuario -->
+    <div id="imagenPrevia">
+      <!-- Aquí se mostrará la imagen seleccionada -->
+    </div>
   </div>
 
   <script>
     const imagenInput = document.getElementById('imagen');
     const imagenPrevia = document.getElementById('imagenPrevia');
+    const formularioImagen = document.getElementById('formularioImagen');
 
     imagenInput.addEventListener('change', (event) => {
       const file = event.target.files[0];
@@ -72,12 +85,18 @@
         reader.onload = (e) => {
           const imagen = document.createElement('img');
           imagen.src = e.target.result;
+          imagen.className = 'static-image'; // Agregar la clase para ajustar el tamaño
           imagenPrevia.innerHTML = '';
           imagenPrevia.appendChild(imagen);
+          imagenInput.value = ''; // Limpiar el valor del input para permitir seleccionar otra imagen
         };
 
         reader.readAsDataURL(file);
       }
+    });
+
+    formularioImagen.addEventListener('submit', (event) => {
+      event.preventDefault(); // Evitar que el formulario se envíe y recargue la página
     });
   </script>
 </body>
